@@ -14,7 +14,11 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 CHROMA_DIRECTORY = PROJECT_ROOT / "chroma_db"
 COLLECTION_NAME = "personal_rag_cosine"
 
-st.set_page_config(page_title="Personal RAG", page_icon="📚")
+st.set_page_config(
+    page_title="Personal RAG",
+    page_icon="📚",
+    initial_sidebar_state="collapsed",
+)
 st.title("Personal RAG")
 st.caption("Ask questions about the documents in your local knowledge base.")
 
@@ -87,10 +91,17 @@ if question:
                     for source in sources:
                         st.write(source)
         except Exception as exc:
-            answer = (
-                "I could not answer that question. Check the API key, dependencies, "
-                "and whether the index was built with `python data.py`."
-            )
+            error_text = str(exc)
+            if "429" in error_text or "rate-limited" in error_text.lower():
+                answer = (
+                    "The chat model is temporarily rate-limited by OpenRouter. "
+                    "Try again shortly or choose another model in OPENROUTER_CHAT_MODEL."
+                )
+            else:
+                answer = (
+                    "I could not answer that question. Check the API key, dependencies, "
+                    "and whether the index was built with `python src/dictionary.py`."
+                )
             sources = []
             st.error(f"{answer}\n\nDetails: {exc}")
 

@@ -4,10 +4,10 @@ from langchain_openai import ChatOpenAI
 
 load_dotenv()
 
-MAX_DISTANCE = 0.6   # needs tuning based on the embedding model and data
+MAX_DISTANCE = 0.9
 
 llm = ChatOpenAI(
-    model=os.getenv("OPENROUTER_CHAT_MODEL", "google/gemma-4-31b-it:free"),  
+    model=os.getenv("OPENROUTER_CHAT_MODEL", "google/gemma-4-26b-a4b-it:free"),  
     api_key=os.getenv("OPENROUTER_API_KEY"),
     base_url="https://openrouter.ai/api/v1",
     temperature=0,
