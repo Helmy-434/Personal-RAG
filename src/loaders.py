@@ -105,7 +105,7 @@ class DocumentLoader:
     def _document(self, text: str, path: Path, **metadata: Any) -> Document:
         return Document(
             page_content=text.strip(),
-            metadata={"source": str(path.resolve()), "type": path.suffix.lower()[1:], **metadata},
+            metadata={"source": path.name, "type": path.suffix.lower()[1:], **metadata},
         )
 
     @staticmethod
