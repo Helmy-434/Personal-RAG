@@ -75,8 +75,6 @@ src/rag.py
 app.py
 ```
 
-The app uses cosine distance for Chroma retrieval and rejects results above
-the `RAG_MAX_DISTANCE` threshold. You can configure it in `.env`:
 
 ```env
 RAG_MAX_DISTANCE=0.9
