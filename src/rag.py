@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 
@@ -32,7 +33,8 @@ def generate(question, results):
     if not results:
         return "I don't have that information in the knowledge base."
     context = "\n\n".join(
-        f"[{d.metadata['source']}, p.{d.metadata.get('page', '-')}]\n{d.page_content}"
+        f"[{Path(str(d.metadata.get('source', 'unknown'))).name}, "
+        f"p.{d.metadata.get('page', '-')}]\n{d.page_content}"
         for d, _ in results
     )
     return llm.invoke(PROMPT.format(context=context, question=question)).content
