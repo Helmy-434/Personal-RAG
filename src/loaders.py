@@ -13,6 +13,13 @@ class LoaderError(RuntimeError):
     """Raised when a source cannot be loaded or its format is unsupported."""
 
 
+def clean_source_name(source: Any) -> str: # to only return the file name not my whole laptop
+    if not source:
+        return "unknown"
+    normalized = str(source).replace("\\", "/")
+    return Path(normalized).name or str(source)
+
+
 class DocumentLoader:
     _TEXT_EXTENSIONS = {".txt", ".text", ".md", ".markdown", ".rst", ".log"}
     _HTML_EXTENSIONS = {".html", ".htm"}
@@ -103,9 +110,10 @@ class DocumentLoader:
         return documents
 
     def _document(self, text: str, path: Path, **metadata: Any) -> Document:
+        raw_source = metadata.pop("source", path.name)
         return Document(
             page_content=text.strip(),
-            metadata={"source": path.name, "type": path.suffix.lower()[1:], **metadata},
+            metadata={"source": clean_source_name(raw_source), "type": path.suffix.lower()[1:], **metadata},
         )
 
     @staticmethod

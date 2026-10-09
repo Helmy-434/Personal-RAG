@@ -3,6 +3,11 @@ from pathlib import Path
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 
+try:
+    from src.loaders import clean_source_name
+except ImportError:
+    from loaders import clean_source_name
+
 load_dotenv()
 
 MAX_DISTANCE = 0.9
@@ -15,7 +20,7 @@ llm = ChatOpenAI(
 )
 
 PROMPT = """You answer questions about me using ONLY the context below.
-- Cite the source for each claim like [cv.pdf, p.2].
+- Cite the source for each claim like [cv.pdf, p.2]. Only use the file name, never full file paths.
 - If the answer is not in the context, say "I don't have that information."
 
 Context:
@@ -33,7 +38,7 @@ def generate(question, results):
     if not results:
         return "I don't have that information in the knowledge base."
     context = "\n\n".join(
-        f"[{Path(str(d.metadata.get('source', 'unknown'))).name}, "
+        f"[{clean_source_name(d.metadata.get('source', 'unknown'))}, "
         f"p.{d.metadata.get('page', '-')}]\n{d.page_content}"
         for d, _ in results
     )

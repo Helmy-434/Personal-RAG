@@ -2,10 +2,16 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from chunker import DocumentChunker
-from embeddings import get_embeddings
-from loaders import DocumentLoader
-from vector_store import ChromaVectorStore
+try:
+    from src.chunker import DocumentChunker
+    from src.embeddings import get_embeddings
+    from src.loaders import DocumentLoader
+    from src.vector_store import ChromaVectorStore
+except ImportError:
+    from chunker import DocumentChunker
+    from embeddings import get_embeddings
+    from loaders import DocumentLoader
+    from vector_store import ChromaVectorStore
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent

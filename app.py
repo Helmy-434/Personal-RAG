@@ -6,6 +6,7 @@ from pathlib import Path
 import streamlit as st
 
 from src.embeddings import get_embeddings
+from src.loaders import clean_source_name
 from src.rag import ask
 from src.vector_store import ChromaVectorStore
 
@@ -34,7 +35,7 @@ def get_store() -> ChromaVectorStore:
 
 def format_source(document: object, score: float) -> str:
     metadata = getattr(document, "metadata", {})
-    source = Path(str(metadata.get("source", "unknown"))).name
+    source = clean_source_name(metadata.get("source", "unknown"))
     page = metadata.get("page")
     location = f"{source}, page {page}" if page else source
     return f"{location} (distance: {score:.4f})"
