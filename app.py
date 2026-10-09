@@ -15,12 +15,11 @@ CHROMA_DIRECTORY = PROJECT_ROOT / "chroma_db"
 COLLECTION_NAME = "personal_rag_cosine"
 
 st.set_page_config(
-    page_title="Personal RAG",
+    page_title="Meet Youssef Helmy",
     page_icon="📚",
-    initial_sidebar_state="collapsed",
 )
-st.title("Personal RAG")
-st.caption("Ask questions about the documents in your local knowledge base.")
+st.title("Meet Youssef Helmy")
+st.caption("Get to know me more")
 
 
 @st.cache_resource
@@ -40,14 +39,6 @@ def format_source(document: object, score: float) -> str:
     location = f"{source}, page {page}" if page else source
     return f"{location} (distance: {score:.4f})"
 
-
-with st.sidebar:
-    st.header("Settings")
-    result_count = st.slider("Retrieved chunks", min_value=1, max_value=10, value=4)
-
-    if st.button("Clear conversation"):
-        st.session_state.pop("messages", None)
-        st.rerun()
 
 if not os.getenv("OPENROUTER_API_KEY"):
     st.warning(
@@ -71,7 +62,7 @@ for message in st.session_state.messages:
                 for source in message["sources"]:
                     st.write(source)
 
-question = st.chat_input("Ask a question about your documents")
+question = st.chat_input("Ask a question about Youssef")
 if question:
     st.session_state.messages.append({"role": "user", "content": question})
     with st.chat_message("user"):
@@ -81,7 +72,7 @@ if question:
         try:
             store = get_store()
             with st.spinner("Searching your documents..."):
-                answer, results = ask(store, question, k=result_count)
+                answer, results = ask(store, question, k=4)
             sources = [
                 format_source(document, score) for document, score in results
             ]
