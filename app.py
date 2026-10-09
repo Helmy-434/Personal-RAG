@@ -1,10 +1,3 @@
-"""Streamlit question-answering interface for the Personal-RAG index.
-
-Start from the project root with:
-
-    streamlit run app.py
-"""
-
 from __future__ import annotations
 
 import os

@@ -2,13 +2,13 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from src.chunker import DocumentChunker
-from src.embeddings import get_embeddings
-from src.loaders import DocumentLoader
-from src.vector_store import ChromaVectorStore
+from chunker import DocumentChunker
+from embeddings import get_embeddings
+from loaders import DocumentLoader
+from vector_store import ChromaVectorStore
 
 
-PROJECT_ROOT = Path(__file__).resolve().parent
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIRECTORY = PROJECT_ROOT / "data"
 CHROMA_DIRECTORY = PROJECT_ROOT / "chroma_db"
 COLLECTION_NAME = "personal_rag_cosine"
@@ -43,4 +43,4 @@ def build_dictionary() -> int:
 
 
 if __name__ == "__main__":
-    build_index()
+    build_dictionary()
