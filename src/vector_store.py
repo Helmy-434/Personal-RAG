@@ -29,6 +29,7 @@ class ChromaVectorStore:
 
         self.persist_directory = Path(persist_directory).expanduser()
         self.collection_name = collection_name
+        self.embedding_function = embedding_function
         self._store = self._create_store(embedding_function)
 
     def add_chunks(self, chunks: Iterable[Document]) -> list[str]:
@@ -69,6 +70,16 @@ class ChromaVectorStore:
         ids = self._store.get(where={"source": source})["ids"]
         if ids:
             self._store.delete(ids=ids)
+
+    def recreate_collection(self) -> None:
+        """Delete and recreate this collection, removing stale indexed data."""
+        try:
+            self._store.delete_collection()
+            self._store = self._create_store(self.embedding_function)
+        except Exception as exc:
+            raise VectorStoreError(
+                f"Could not recreate Chroma collection: {exc}"
+            ) from exc
 
     def _create_store(self, embedding_function: Embeddings) -> Any:
         try:

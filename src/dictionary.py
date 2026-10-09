@@ -33,6 +33,7 @@ def build_dictionary() -> int:
         persist_directory=CHROMA_DIRECTORY,
         collection_name=COLLECTION_NAME,
     )
+    store.recreate_collection()
     ids = store.add_chunks(chunks)
 
     print(f"Loaded documents: {len(documents)}")
